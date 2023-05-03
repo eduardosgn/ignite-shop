@@ -9,21 +9,19 @@ export const HomeContainer = styled('main', {
     minHeight: 656
 })
 
-export const Product = styled('a', {
-    background: 'linear-gradient(100deg, #1ea483 0%, #7465d4 100%)',
-    borderRadius: '8px',
-    // padding: '0.25rem',
+export const Product = styled('div', {
+    background: 'linear-gradient(180deg, #1ea483 0%, #7465d4 100%)',
+    borderRadius: 8,
     cursor: 'pointer',
     position: 'relative',
     overflow: 'hidden',
-    minWidth: 540,
 
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
 
     img: {
-        objectFit: 'cover'
+        objectFit: 'cover',
     },
 
     footer: {
@@ -33,7 +31,7 @@ export const Product = styled('a', {
         right: '0.25rem',
         padding: '2rem',
 
-        borderRadius: '6px',
+        borderRadius: 6,
 
         display: 'flex',
         alignItems: 'center',
@@ -43,23 +41,24 @@ export const Product = styled('a', {
 
         transform: 'translateY(110%)',
         opacity: 0,
-        transition: 'all 0.4s ease-in-out',
+        transition: 'all 0.2s ease-in-out',
 
         strong: {
-            fontSize: '$lg'
+            fontSize: '$lg',
+            color: '$gray100',
         },
 
         span: {
             fontSize: '$xl',
             fontWeight: 'bold',
-            color: '$green300'
-        }
+            color: '$green300',
+        },
     },
 
     '&:hover': {
         footer: {
-            transform: 'translateY(0)',
-            opacity: 1
-        }
-    }
-})
+            transform: 'translateY(0%)',
+            opacity: 1,
+        },
+    },
+});

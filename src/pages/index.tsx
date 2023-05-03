@@ -1,9 +1,11 @@
 import { HomeContainer, Product } from '@/styles/pages/home';
 import Image from 'next/image';
+import Head from 'next/head';
+import Link from 'next/link';
 import { useKeenSlider } from 'keen-slider/react';
 import 'keen-slider/keen-slider.min.css';
 import { stripe } from '@/lib/stripe';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import Stripe from 'stripe';
 
 interface HomeProps {
@@ -11,7 +13,7 @@ interface HomeProps {
         id: string;
         name: string;
         imageUrl: string;
-        price: number;
+        price: string;
     }[];
 }
 
@@ -24,32 +26,44 @@ export default function Home({ products }: HomeProps) {
     });
 
     return (
-        <HomeContainer ref={sliderRef} className="keen-slider">
-            {products.map((product) => {
-                return (
-                    <Product key={product.id} className="keen-slider__slide">
-                        <Image
-                            src={product.imageUrl}
-                            alt="Camiseta 01"
-                            width={520}
-                            height={480}
-                            quality={100}
-                            placeholder="blur"
-                            blurDataURL={product.imageUrl}
-                        />
+        <>
+            <Head>
+                <title>Ignite Shop</title>
+            </Head>
 
-                        <footer>
-                            <strong>{product.name}</strong>
-                            <span>{product.price}</span>
-                        </footer>
-                    </Product>
-                );
-            })}
-        </HomeContainer>
+            <HomeContainer ref={sliderRef} className="keen-slider">
+                {products.map((product) => {
+                    return (
+                        <Link
+                            key={product.id}
+                            href={`/product/${product.id}`}
+                            prefetch={false}
+                        >
+                            <Product className="keen-slider__slide">
+                                <Image
+                                    src={product.imageUrl}
+                                    alt="Camiseta 01"
+                                    width={520}
+                                    height={480}
+                                    quality={100}
+                                    placeholder="blur"
+                                    blurDataURL={product.imageUrl}
+                                />
+
+                                <footer>
+                                    <strong>{product.name}</strong>
+                                    <span>{product.price}</span>
+                                </footer>
+                            </Product>
+                        </Link>
+                    );
+                })}
+            </HomeContainer>
+        </>
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
     const res = await stripe.products.list({
         expand: ['data.default_price'],
     });
@@ -72,5 +86,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
         props: {
             products,
         },
+        // SSG - Recriando a página estática em um espaço de tempo
+        revalidate: 60 * 60 * 2, // a cada 2 horas
     };
 };
